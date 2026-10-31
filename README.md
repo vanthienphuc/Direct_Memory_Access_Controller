@@ -1,17 +1,13 @@
 # Direct Memory Access (DMA) Controller Design
 
-![Language](https://img.shields.io/badge/Language-Verilog-blue.svg)
-![Bus Interface](https://img.shields.io/badge/Interface-APB%20%7C%20AXI4-green.svg)
-![Status](https://img.shields.io/badge/Status-Verified-success.svg)
-
 ## Project Overview
 This repository contains the RTL design and verification environment for a custom **Direct Memory Access (DMA) Controller**. The DMA controller is designed to efficiently move blocks of data from a source memory address to a destination memory address without CPU intervention, maximizing system throughput.
 
-This project was developed as part of a System-on-Chip (SoC) design curriculum and showcases practical experience with standard bus protocols (AMBA APB and AXI4) and high-performance hardware design techniques.
+This project was developed as part of a System-on-Chip (SoC) design curriculum and showcases practical experience with standard bus protocols (AMBA APB and AXI4-lite) and high-performance hardware design techniques.
 
 ## Key Features
 - **AMBA APB Slave Interface**: Used for configuring Control and Status Registers (CSRs).
-- **AMBA AXI4 Master Interface**: Handles high-speed memory-mapped read and write transactions.
+- **AMBA AXI4-Lite Master Interface**: Handles high-speed memory-mapped read and write transactions.
 - **Overlapping Read/Write Architecture**: Achieves high throughput by decoupling read and write operations using an internal FIFO buffer, allowing simultaneous AXI read and write phases.
 - **Synchronous FIFO**: An internal 4-word deep (`DEPTH_LOG2=2`), First-Word Fall-Through (FWFT) FIFO designed for seamless data buffering between the AXI read and write masters.
 - **FSM-Based Control**: Robust Finite State Machines governing the APB interface, AXI Read Master, AXI Write Master, and the Main DMA Engine.
@@ -36,12 +32,12 @@ graph TD
     end
 
     subgraph DMA_Controller [DMA Controller RTL]
-        TOP[dma.v Top Wrapper]:::dma
+        TOP[dma.v Top]:::dma
         CSR[APB Slave CSR]:::dma
         ME[Main Engine]:::dma
         FIFO[FWFT Data FIFO]:::dma
-        AXI_RM[AXI4 Read Master]:::dma
-        AXI_WM[AXI4 Write Master]:::dma
+        AXI_RM[AXI4-Lite Read Master]:::dma
+        AXI_WM[AXI4-Lite Write Master]:::dma
         
         TOP --- CSR
         TOP --- ME
@@ -102,14 +98,31 @@ The design is verified using a pure Verilog testbench (`dma_top_tb.v`).
 ### Running the Simulation
 To run the simulation, you will need a standard Verilog simulator (e.g., ModelSim, VCS, or Icarus Verilog).
 
-```bash
-# Example using Icarus Verilog
-iverilog -o dma_sim *.v
-vvp dma_sim
+## Simulation & Synthesis (Cadence EDA Flow)
 
-# To view waveforms
-gtkwave dma_top_tb.vcd
+This project is built and verified using industry-standard Cadence EDA tools. A fully configured `Makefile` is provided to automate RTL simulation (Xcelium), logic synthesis (Genus), and logic equivalence checking (Conformal).
+
+**To run RTL Simulation (Cadence Xcelium):**
+
+```bash
+make sim
 ```
+
+Waveforms can be analyzed using Cadence SimVision.
+
+**To run Logic Synthesis (Cadence Genus):**
+
+```bash
+make synth
+```
+
+**To run Logic Equivalence Checking (Cadence Conformal):**
+
+```bash
+make lec
+```
+**Note:** Ensure your Cadence environment and license paths are properly sourced before running the commands.
+
 *Expected Output:*
 ```text
 [TB] Starting DMA Test
