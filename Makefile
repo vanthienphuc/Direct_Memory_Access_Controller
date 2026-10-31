@@ -10,8 +10,8 @@
 CORE                ?= 4
 
 # Top-level modules
-TOP_TB              ?= datapath_tb
-TOP_SYN             ?= datapath
+TOP_TB              ?= dma_top_tb
+TOP_SYN             ?= dma_top
 
 # Directories
 LIB_DIR             := ./libraries/TIMING/CUSTOM ./libraries/TIMING/STDCELL ./libraries/LEF/STDCELL ./libraries/LEF/CUSTOM ./libraries/LEF/IO
@@ -23,7 +23,8 @@ SCRIPT_DIR          := ./scripts
 
 # Files
 LIB_FILES           := ss_g_1v08_125c.lib ss_hvt_1v08_125c.lib ram_256x16A_slow_syn.lib rom_512x16A_slow_syn.lib pllclk_slow.lib
-RTL_LIST            := alu_32bit.v, register_file.v, data_memory.v, datapath.v
+RTL_LIST            := apb_master.v axi4_ram_slave.v dma_apb_slave_csr.v dma_axi_fifo.v dma_axi_read_master.v dma_axi_write_master.v \
+					   dma_main_engine.v dma_top.v
 
 SRCS                := $(wildcard $(RTL_DIR)/*.v)
 SRCS_LAB            := $(shell grep -RL "module $(TOP_TB)" $(RTL_DIR))
