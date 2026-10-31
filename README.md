@@ -100,27 +100,48 @@ To run the simulation, you will need a standard Verilog simulator (e.g., ModelSi
 
 ## Simulation & Synthesis (Cadence EDA Flow)
 
-This project is built and verified using industry-standard Cadence EDA tools. A fully configured `Makefile` is provided to automate RTL simulation (Xcelium), logic synthesis (Genus), and logic equivalence checking (Conformal).
+This project is built and verified using industry-standard Cadence EDA tools. A configured `Makefile` is provided to automate RTL simulation (Xcelium), logic synthesis (Genus), and logic equivalence checking (Conformal).
 
-**To run RTL Simulation (Cadence Xcelium):**
+### RTL Simulation (Cadence Xcelium)
 
-```bash
-make sim
-```
+The simulation flow consists of the following steps:
 
-Waveforms can be analyzed using Cadence SimVision.
-
-**To run Logic Synthesis (Cadence Genus):**
+**Compile RTL files:**
 
 ```bash
-make synth
+make compile
 ```
 
-**To run Logic Equivalence Checking (Cadence Conformal):**
+**Elaborate the testbench:**
+
+```bash
+make build
+```
+
+**Run RTL simulation:**
+
+```bash
+make run
+```
+
+**Run simulation and launch the waveform viewer (Cadence SimVision):**
+
+```bash
+make wave
+```
+
+### Logic Synthesis (Cadence Genus)
+
+```bash
+make syn
+```
+
+### Logic Equivalence Checking (Cadence Conformal)
 
 ```bash
 make lec
 ```
+
 **Note:** Ensure your Cadence environment and license paths are properly sourced before running the commands.
 
 *Expected Output:*
